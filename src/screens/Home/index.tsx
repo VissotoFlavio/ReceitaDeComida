@@ -1,14 +1,31 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Image, ScrollView, Text, TextInput, View } from "react-native";
 import { BellIcon, MagnifyingGlassIcon } from "react-native-heroicons/outline";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import Categories from "../../components/categories";
+import { useAPICategory } from "../../hooks";
+import { Category } from "../../interfaces/response";
 import { ScreenProps } from "../../navigation";
 
 type Props = ScreenProps<"Home">;
 
 export const HomeScreen: React.FC<Props> = (props): React.JSX.Element => {
-  const [activeCategory, setActiveCategory] = useState(0);
+  const apiCategories = useAPICategory();
+
+  const [activeCategory, setActiveCategory] = useState("");
+  const [categories, setCategories] = useState<Category[]>([]);
+
+  const getAllCategories = async () => {
+    const res = await apiCategories.getAll();
+
+    if (res && res.categories) {
+      setCategories(res.categories);
+    }
+  };
+
+  useEffect(() => {
+    getAllCategories();
+  }, []);
 
   return (
     <View className="flex-1 bg-white">
@@ -26,12 +43,9 @@ export const HomeScreen: React.FC<Props> = (props): React.JSX.Element => {
           </Text>
           <View>
             <Text className="font-semibold text-neutral-600" style={{ fontSize: hp(3.8) }}>
-              Faça sua própria comida,
+              Faça sua própria <Text className="text-amber-400">comida</Text>
             </Text>
           </View>
-          <Text className="font-semibold text-neutral-600" style={{ fontSize: hp(3.8) }}>
-            fique em <Text className="text-amber-400">casa</Text>
-          </Text>
         </View>
 
         {/* search bar */}
@@ -49,7 +63,9 @@ export const HomeScreen: React.FC<Props> = (props): React.JSX.Element => {
 
         {/* Categories*/}
         <View>
-          <Categories activeCategory={activeCategory} setActiveCategory={setActiveCategory} />
+          {categories && categories.length > 0 && (
+            <Categories categories={categories} activeCategory={activeCategory} setActiveCategory={setActiveCategory} />
+          )}
         </View>
       </ScrollView>
     </View>

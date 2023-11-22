@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import { Image, Text, View } from "react-native";
 import Animated, { useSharedValue, withSpring } from "react-native-reanimated";
@@ -10,6 +9,7 @@ type Props = ScreenProps<"Welcome">;
 export const WelcomeScreen: React.FC<Props> = (props): React.JSX.Element => {
   const ring1padding = useSharedValue(0);
   const ring2padding = useSharedValue(0);
+
   useEffect(() => {
     setTimeout(() => {
       ring1padding.value = withSpring(hp(5));
@@ -25,8 +25,6 @@ export const WelcomeScreen: React.FC<Props> = (props): React.JSX.Element => {
 
   return (
     <View className="flex-1 justify-center items-center space-y-10 bg-amber-500">
-      <StatusBar style="light" />
-
       {/* logo image with rings */}
       <Animated.View
         className="bg-white/20 rounded-full"
@@ -63,7 +61,7 @@ export const WelcomeScreen: React.FC<Props> = (props): React.JSX.Element => {
             fontSize: hp(2.5),
           }}
         >
-          Food is always right
+          Receitas que despertam memórias
         </Text>
       </View>
     </View>

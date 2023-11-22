@@ -1,3 +1,4 @@
+import { StatusBar } from "expo-status-bar";
 import { NativeWindStyleSheet } from "nativewind";
 import AppNavigation from "./src/navigation";
 
@@ -6,7 +7,12 @@ NativeWindStyleSheet.setOutput({
 });
 
 const App = () => {
-  return <AppNavigation />;
+  return (
+    <>
+      <StatusBar style="dark" />
+      <AppNavigation />
+    </>
+  );
 };
 
 export default App;

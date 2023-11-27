@@ -1,18 +1,18 @@
 import React from "react";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
-import { heightPercentageToDP as hp } from "react-native-responsive-screen";
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { Category } from "../interfaces/response";
 
 export type CategoryProps = {
   categories: Category[];
   activeCategory: string;
-  setActiveCategory: React.Dispatch<React.SetStateAction<string>>;
+  onChangeCategory: (value: string) => void;
 };
 
 const Categories = (props: CategoryProps): React.JSX.Element => {
   const handlePressCategory = (index: string): void => {
-    props.setActiveCategory(index);
+    props.onChangeCategory(index);
   };
 
   return (
@@ -24,7 +24,7 @@ const Categories = (props: CategoryProps): React.JSX.Element => {
         contentContainerStyle={{ paddingHorizontal: 15 }}
       >
         {props.categories.map((x: Category, index: number) => {
-          const isActive = x.idCategory === props.activeCategory;
+          const isActive = x.idCategory.toLowerCase() === props.activeCategory.toLowerCase();
           const activeButtonClass = isActive ? "bg-amber-400" : "bg-black/10";
 
           return (
@@ -45,7 +45,8 @@ const Categories = (props: CategoryProps): React.JSX.Element => {
                   className="rounded-full"
                 />
               </View>
-              <Text className="text-neutral-600" style={{ fontSize: hp(1.6) }}>
+              <Text className="text-neutral-600 text-center" style={{ maxWidth: wp(20), fontSize: hp(1.6) }}>
+                {/* {x.strCategory?.split(" ").join("\n")} */}
                 {x.strCategory}
               </Text>
             </TouchableOpacity>

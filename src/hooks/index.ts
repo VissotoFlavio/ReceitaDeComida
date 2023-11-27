@@ -1,1 +1,1 @@
-export * from "./useAPICategory";
+export * from "./useAPIFood";

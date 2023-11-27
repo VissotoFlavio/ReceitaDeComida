@@ -3,29 +3,55 @@ import { Image, ScrollView, Text, TextInput, View } from "react-native";
 import { BellIcon, MagnifyingGlassIcon } from "react-native-heroicons/outline";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import Categories from "../../components/categories";
-import { useAPICategory } from "../../hooks";
-import { Category } from "../../interfaces/response";
+import Loading from "../../components/loading";
+import Recepis from "../../components/recepis";
+import { useAPIFood } from "../../hooks";
+import { Category, Meal } from "../../interfaces/response";
 import { ScreenProps } from "../../navigation";
 
 type Props = ScreenProps<"Home">;
 
 export const HomeScreen: React.FC<Props> = (props): React.JSX.Element => {
-  const apiCategories = useAPICategory();
+  const apiCategories = useAPIFood();
 
-  const [activeCategory, setActiveCategory] = useState("");
+  const [activeCategory, setActiveCategory] = useState<string>("");
   const [categories, setCategories] = useState<Category[]>([]);
-
-  const getAllCategories = async () => {
-    const res = await apiCategories.getAll();
-
-    if (res && res.categories) {
-      setCategories(res.categories);
-    }
-  };
+  const [recipes, setRecipes] = useState<Meal[]>([]);
 
   useEffect(() => {
     getAllCategories();
   }, []);
+
+  useEffect(() => {
+    if (categories && categories.length > 0) {
+      getRecipes(categories[0].idCategory);
+    }
+  }, [categories]);
+
+  const handleChangeCategory = (idCategory: string): void => {
+    setRecipes([]);
+    // setActiveCategory(idCategory);
+    // getRecipes(idCategory);
+  };
+
+  const getAllCategories = async () => {
+    const res = await apiCategories.getAllCategories();
+    if (res && res.categories) {
+      setCategories(res.categories);
+      setActiveCategory(res.categories[0].idCategory);
+      getRecipes(res.categories[0].idCategory);
+    }
+  };
+
+  const getRecipes = async (idCategory: string) => {
+    if (categories.length > 0) {
+      const cat = categories.filter((x) => x.idCategory === idCategory)[0];
+      const res = await apiCategories.getRecipesByCategory(cat.strCategory);
+      if (res && res.meals) {
+        setRecipes(res.meals);
+      }
+    }
+  };
 
   return (
     <View className="flex-1 bg-white">
@@ -64,7 +90,20 @@ export const HomeScreen: React.FC<Props> = (props): React.JSX.Element => {
         {/* Categories*/}
         <View>
           {categories && categories.length > 0 && (
-            <Categories categories={categories} activeCategory={activeCategory} setActiveCategory={setActiveCategory} />
+            <Categories
+              categories={categories}
+              activeCategory={activeCategory}
+              onChangeCategory={handleChangeCategory}
+            />
+          )}
+        </View>
+
+        {/* Recipes */}
+        <View className="mx-4 space-y-3">
+          {!recipes || recipes.length == 0 ? (
+            <Loading size="large" className="pt-10" />
+          ) : (
+            recipes && recipes.length > 0 && <Recepis recipes={recipes} />
           )}
         </View>
       </ScrollView>

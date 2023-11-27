@@ -9,7 +9,7 @@ NativeWindStyleSheet.setOutput({
 const App = () => {
   return (
     <>
-      <StatusBar style="dark" />
+      <StatusBar style="dark" backgroundColor="white" />
       <AppNavigation />
     </>
   );

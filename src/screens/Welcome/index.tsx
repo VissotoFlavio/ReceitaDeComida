@@ -20,7 +20,7 @@ export const WelcomeScreen: React.FC<Props> = (props): React.JSX.Element => {
 
     setTimeout(() => {
       props.navigation.navigate("Home", { name: "Flavio", idade: 50 });
-    }, 2500);
+    }, 1500);
   }, []);
 
   return (
@@ -38,10 +38,7 @@ export const WelcomeScreen: React.FC<Props> = (props): React.JSX.Element => {
             padding: ring1padding,
           }}
         >
-          <Image
-            source={require("../../../assets/images/welcome.png")}
-            style={{ height: hp(20), width: hp(20) }}
-          />
+          <Image source={require("../../../assets/images/welcome.png")} style={{ height: hp(20), width: hp(20) }} />
         </Animated.View>
       </Animated.View>
 

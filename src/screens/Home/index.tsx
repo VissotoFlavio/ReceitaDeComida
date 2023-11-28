@@ -30,8 +30,8 @@ export const HomeScreen: React.FC<Props> = (props): React.JSX.Element => {
 
   const handleChangeCategory = (idCategory: string): void => {
     setRecipes([]);
-    // setActiveCategory(idCategory);
-    // getRecipes(idCategory);
+    setActiveCategory(idCategory);
+    getRecipes(idCategory);
   };
 
   const getAllCategories = async () => {
@@ -103,7 +103,7 @@ export const HomeScreen: React.FC<Props> = (props): React.JSX.Element => {
           {!recipes || recipes.length == 0 ? (
             <Loading size="large" className="pt-10" />
           ) : (
-            recipes && recipes.length > 0 && <Recepis recipes={recipes} />
+            recipes && recipes.length > 0 && <Recepis recipes={[recipes[0]]} />
           )}
         </View>
       </ScrollView>

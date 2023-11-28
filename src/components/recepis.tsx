@@ -1,7 +1,8 @@
 import React from "react";
-import { FlatList, Image, Pressable, Text, View } from "react-native";
+import { FlatList, Pressable, Text, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
+import ImageCached from "../helpers/image-cached";
 import { Meal } from "../interfaces/response";
 
 export type RecipesProps = {
@@ -56,10 +57,9 @@ const Recepi = (item: ItemMeal): React.JSX.Element => {
         className="flex mb-4 space-y-1"
         style={{ flex: 0.5, paddingRight: isEven ? 8 : 0, paddingLeft: isEven ? 0 : 8 }}
       >
-        <Image
-          source={{
-            uri: item.meal.strMealThumb,
-          }}
+        <ImageCached
+          uri={item.meal.strMealThumb}
+          cacheTimeInSeconds={5}
           style={{
             width: "100%",
             height: hp(35),
